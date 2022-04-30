@@ -8,26 +8,63 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
+class User(Base):
+    __tablename__ = 'User'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    nombre = Column(String(250))
+    email = Column(String(250))
+    password = Column(String(250))
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+
+class Naves(Base):
+    __tablename__ = 'Naves'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    model = Column(String(250))
+    manufacturer = Column(String(250))
 
-    def to_dict(self):
-        return {}
 
-## Draw from SQLAlchemy base
+class Planetas(Base):
+    __tablename__ = 'Planetas'
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String(250))
+    population = Column(Integer)
+    gravity = Column(String(250))
+
+
+class Personajes(Base):
+    __tablename__ = 'Personajes'
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String(250))
+    estatura = Column(Integer)
+    colorOjos = Column(String(250))
+
+
+class Favoritos_Pj(Base):
+    __tablename__ = 'Favoritos_Pj'
+    idFav = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey('User.id'))
+    id_pj = Column(Integer, ForeignKey('Personajes.id'))
+    User = relationship(User)
+    Personajes = relationship(Personajes)
+
+
+class Favoritos_PL(Base):
+    __tablename__ = 'Favoritos_PL'
+    idFav = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey('User.id'))
+    id_pl = Column(Integer, ForeignKey('Planetas.id'))
+    User = relationship(User)
+    Planetas = relationship(Planetas)
+
+
+class Favoritos_Nv(Base):
+    __tablename__ = 'Favoritos_Nv'
+    idFav = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey('User.id'))
+    id_nv = Column(Integer, ForeignKey('Naves.id'))
+    User = relationship(User)
+    Naves = relationship(Naves)
+
+
+# Draw from SQLAlchemy base
 render_er(Base, 'diagram.png')
